@@ -58,6 +58,7 @@ namespace MyCodeCamp.Controllers
                 //{
                 //    return BadRequest(ModelState);
                 //}
+
                 var camp = _repo.GetCampByMoniker(moniker);
                 if(camp == null)
                 {
