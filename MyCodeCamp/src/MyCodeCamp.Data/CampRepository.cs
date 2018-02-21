@@ -78,6 +78,13 @@ namespace MyCodeCamp.Data
         .Where(s => s.Id == speakerId)
         .FirstOrDefault();
     }
+        public Speaker GetSpeakerwithMoniker(int speakerId, string moniker)
+        {
+            return _context.Speakers
+                .Include(s => s.Camp)
+                .Where(s => s.Id == speakerId && s.Camp.Moniker == moniker)
+                .FirstOrDefault();
+        }
 
     public IEnumerable<Speaker> GetSpeakers(int id)
     {
@@ -102,12 +109,13 @@ namespace MyCodeCamp.Data
     {
       return _context.Speakers
         .Include(s => s.Camp)
-        .Where(s => s.Camp.Moniker.Equals(moniker, StringComparison.CurrentCultureIgnoreCase))
+        .Where(s =>s.Camp.Moniker == moniker)
         .OrderBy(s => s.Name)
         .ToList();
-    }
+            //       .Where(s => s.Camp.Moniker.Equals(moniker, StringComparison.CurrentCultureIgnoreCase))
+        }
 
-    public IEnumerable<Speaker> GetSpeakersByMonikerWithTalks(string moniker)
+        public IEnumerable<Speaker> GetSpeakersByMonikerWithTalks(string moniker)
     {
       return _context.Speakers
         .Include(s => s.Camp)

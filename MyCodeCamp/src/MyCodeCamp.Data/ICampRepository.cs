@@ -24,6 +24,7 @@ namespace MyCodeCamp.Data
     IEnumerable<Speaker> GetSpeakersByMoniker(string moniker);
     IEnumerable<Speaker> GetSpeakersByMonikerWithTalks(string moniker);
     Speaker GetSpeaker(int speakerId);
+    Speaker GetSpeakerwithMoniker(int speakerId,string moniker);
     Speaker GetSpeakerWithTalks(int speakerId);
 
     // Talks

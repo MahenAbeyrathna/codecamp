@@ -38,12 +38,18 @@ namespace MyCodeCamp.Controllers
         [HttpGet("{id}",Name = "SpeakerGet")]
         public IActionResult Get(string moniker,int id)
         {
+            //var speaker = _repo.GetSpeakerwithMoniker(id, moniker);
+            //if(speaker == null)
+            //{
+            //    return NotFound();
+            //}
+            //return Ok(speaker);
             var speaker = _repo.GetSpeaker(id);
-            if(speaker == null)
+            if (speaker == null)
             {
                 return NotFound();
             }
-            if(speaker.Camp.Moniker != moniker)
+            if (speaker.Camp != null && speaker.Camp.Moniker != moniker)
             {
                 return BadRequest("Speaker not in specified camp");
             }
@@ -95,10 +101,12 @@ namespace MyCodeCamp.Controllers
                 {
                     return BadRequest($"Speaker and Camp not matched");
                 }
+
                 _mapper.Map(model, speaker);
+
                 if(await _repo.SaveAllAsync())
                 {
-                    return Ok(_mapper.Map<CampModel>(speaker));
+                    return Ok(_mapper.Map<SpeakerModel>(speaker));
 
                 }
             }
@@ -108,6 +116,34 @@ namespace MyCodeCamp.Controllers
                 _logger.LogError($"Exception thrown while updating Speaker: {ex}");
             }
             return BadRequest("Couldn't update the Speaker");
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id,string moniker)
+        {
+            try
+            {
+                var speaker = _repo.GetSpeaker(id);
+                if (speaker == null)
+                {
+                    return NotFound();
+                }
+                if (speaker.Camp.Moniker != moniker)
+                {
+                    return BadRequest();
+                }
+                _repo.Delete(speaker);
+                if(await _repo.SaveAllAsync())
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Exception thrown while deleting ; {ex}");
+            }
+            return BadRequest("Couldn't delete Speaker");
+           
         }
     }
 }

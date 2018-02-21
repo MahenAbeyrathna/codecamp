@@ -23,7 +23,8 @@ namespace MyCodeCamp.Models
         {
             var url = (IUrlHelper)_httpContextAccessor.HttpContext.Items[BaseController.URLHELPER];
 
-            return url.Link("SpeakerGet", new { moniker = source.Camp.Moniker ,id= source.Id});
+            return url.Link("SpeakerGet", new { moniker = source.Camp.Length >0 ? source.Camp.Moniker : ""  ,id= source.Id});
         }
     }
 }
+//moniker = source.Camp.Length >0 ? source.Camp.Moniker : "" 
